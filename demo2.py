@@ -133,6 +133,7 @@ def palindrome(string:str):
     return True
 print(palindrome("theht"))
 print(palindrome("theeht"))
+print(palindrome("theeht"))
 print(palindrome("theaht"))
 def occur(string:str,char:str):
     total = 0
