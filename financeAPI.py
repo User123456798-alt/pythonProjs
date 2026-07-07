@@ -1,6 +1,9 @@
 from fastapi import APIRouter, FastAPI
 from pydantic import BaseModel
 
+balance = 10000
+transactions = []
+
 app = FastAPI()
 finace_router = APIRouter()
 app.include_router(finace_router,prefix="/finance",tags=["finance"])
@@ -184,3 +187,72 @@ def calcElectric(units:int):
         "bill_amount": total
     }
 
+health_router = APIRouter()
+app.include_router(health_router,prefix="/health",tags=["health"])
+
+@health_router.get("/bmi")
+def getBmi(height:int,weight:int):
+    bmi = weight/((height/100)**2)
+    status = "Obese"
+    if bmi<18.5:
+        status = "Underweight"
+    elif bmi<=24.9:
+        status = "Normal"
+    elif bmi<=29.9:
+        status = "Overweight"
+    return{
+        "height":height,
+        "weight":weight,
+        "bmi":bmi,
+        "category":status
+    }
+
+login_router = APIRouter()
+app.include_router(login_router,prefix="/login",tags=["login"])
+
+@login_router.post("/login")
+def login(username:str,password:str):
+    if username == "admin" and password == "admin123":
+        return{
+            "status":"Success"
+        }
+    return{
+        "status":"Failed"
+    }
+
+ATM_router = APIRouter()
+app.include_router(ATM_router,prefix="/ATM",tags=["ATM"])
+
+
+@ATM_router.get("/balance")
+def getBalance():
+    global balance
+    return{
+        "Balance":balance
+    }
+    
+@ATM_router.post("/deposit")
+def deposit(amount:int):
+    global balance 
+    balance += amount
+    transactions.append("deposit:"+str(amount))
+    
+@ATM_router.post("/withdraw")
+def withdraw(amount:int):
+    global balance 
+    if amount > balance:
+        transactions.append("balance too low")
+        return{
+            "Error":"balance too small to process request"
+        }
+    else:
+        transactions.append("withdrawl:"+str(amount))
+        balance -= amount
+    
+@ATM_router.get("/statement")
+def getTransactions():
+    global balance 
+    return{
+        "transactions":transactions,
+        "current_balance":balance
+    }
