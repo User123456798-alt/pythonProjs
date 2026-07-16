@@ -21,7 +21,7 @@ def createCustomer(name:str,mobile:str,email:str,dob:str):
         "dob": doj
     }
 
-def updateCustomer(name:str,mobile:str,email,str):
+def updateCustomer(name:str,mobile:str,email:str):
     customer = util.findItem("data/customer.txt",name)
     if customer == -1:
         return{
@@ -53,8 +53,8 @@ def updateCustomer(name:str,mobile:str,email,str):
     util.replaceItem("data/customer.txt",customer)
 
 def removeCustomers(name:str):
-    if not os.path.isdir("removed_customers"):
-        os.makedirs("removed_customers");
+    if not os.path.isdir("removed_accounts"):
+        os.makedirs("removed_accounts");
     finLines = ""
     prevCustomer = []
     with open("data/customer.txt","r+") as f:
@@ -66,9 +66,10 @@ def removeCustomers(name:str):
                 lineS = line.split(",")
                 if lineS[1] == name:
                     prevCustomer = lineS
+                    custNum = lineS[0]
                     notFound = False
                     continue
-            finLines = finLines + line + "\n"
+            finLines = finLines + line 
     finlines = finLines[:-1]
     with open("data/customer.txt","w") as f:
         f.writelines(finLines)
@@ -79,6 +80,28 @@ def removeCustomers(name:str):
         for i in prevCustomer:
             f.write(i + ",")
         f.write(str(date.today()))
+    lines = ""
+    with open("data/accounts.txt","r")as f:
+        lines = f.readlines()
+    newLines =""
+    prev = ""
+    for line in lines:
+        lineS= line.split(",")
+        if lineS[3] == custNum:
+            accNo = lineS[0]
+            os.rename("data/statements/statement_{accNo}.txt", "data/removed_accounts/statement_{accNo}.txt")
+            with open("data/dump.txt","a") as f:
+                f.seek(0,2)
+                f.write("\n")
+                f.write("account:")
+                for i in lineS:
+                    f.write(i + ",")
+                f.write(str(date.today()))
+            continue
+        newLines = newLines + line
+    newLines = newLines[:-1]
+    with open("data/accounts.txt","w") as f:
+        f.writelines(newLines)
     return{
         "name": line[1],
         "mobile": line[2],

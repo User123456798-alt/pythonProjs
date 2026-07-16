@@ -73,9 +73,134 @@ def callCreateCustomer(name:str,mobile:str,email:str,dob:str):
 def callUpdateCustomer(name:str,mobile="",email=""):
     return customer.updateCustomer(name,mobile,email)
 
+@customer_router.delete("/delete")
+def callDeleteCustomer(name:str):
+    return customer.removeCustomers(name)
+
 account_router = APIRouter()
 app.include_router(account_router,prefix="/account",tags=["account"])
 
 @account_router.post("/create")
 def callCreateAccount(name:str,type:str,start:int):
     return account.createAccount(name,type,start)
+
+@account_router.put("/deposit")
+def callDeposit(amount:int,name="",type="",acc=0):
+    if acc!=0:
+        return account.deposit(acc,amount)
+    elif name != "" and type != "":
+        return account.deposit(name,type,amount)
+    else:
+        return{
+            "status":False,
+            "message":"not enough parameters"
+        }
+    
+@account_router.put("/delete")
+def callDeleteAccount(name="",type="",acc=0):
+    if acc!=0:
+        return account.deleteAccount(acc)
+    elif name != "" and type != "":
+        return account.deleteAccount(name,type)
+    else:
+        return{
+            "status":False,
+            "message":"not enough parameters"
+        }
+    
+@account_router.put("/withdraw")
+def callWithdraw(amount:int,name="",type="",acc=0):
+    if acc!=0:
+        return account.withdraw(acc,amount)
+    elif name != "" and type != "":
+        return account.withdraw(name,type,amount)
+    else:
+        return{
+            "status":False,
+            "message":"not enough parameters"
+        }
+    
+@account_router.put("/deposit")
+def callWithdraw(amount:int,name="",type="",acc=0):
+    if acc!=0:
+        return account.deposit(acc,amount)
+    elif name != "" and type != "":
+        return account.deposit(name,type,amount)
+    else:
+        return{
+            "status":False,
+            "message":"not enough parameters"
+        }
+    
+def main():
+    cmd = -1
+    cmd2 = -1
+    while(cmd!=0):
+        print("Welcome to G10X Banking System\nChoose your category:\n1. Staff\n2. Role\n3. Customer\n0. Quit")
+        cmd = input()
+        match cmd:
+            case 1:
+                print("1. Get Staff Details\n2. Add Staff\n3. Update Staff\n4. Delete Staff")
+                cmd2 = input()
+                match cmd2:
+                    case 1:
+                        print("enter id")
+                        info = input()
+                        staff.fetchStaff(info)
+                        break
+                    case 2:
+                        print("enter staff info")
+                        info = input()
+                        info = info.split(",")
+                        staff.createStaff(info[0],int(info[1]),info[2],info[3],info[4])
+                        break
+                    case 3:
+                        staff.updateStaff()
+                        break
+                    case 4:
+                        staff.deleteStaff()
+                        break
+                break
+            case 2:
+                print("1. Get Role Details\n2. Add Role\n3. Update Role\n4. Delete Role")
+                cmd2 = input()
+                match cmd2:
+                    case 1:
+                        role.fetchRole()
+                        break
+                    case 2:
+                        role.createRole()
+                        break
+                    case 3:
+                        role.updateRole()
+                        break
+                    case 4:
+                        role.deleteRole()
+                        break
+                break
+            case 3:
+                print("1. Get Customer Details\n2. Add Customer\n3. Update Customer\n4. Delete Customer\n5. Deposit\n6. Withdraw")
+                cmd2 = input()
+                match cmd2:
+                    case 1:
+                        customer.findCustomer()
+                        break
+                    case 2:
+                        customer.createCustomer()
+                        break
+                    case 3:
+                        customer.updateCustomer()
+                        break
+                    case 4:
+                        customer.removeCustomers()
+                        break
+                    case 5:
+                        account.deposit()
+                        break
+                    case 6:
+                        account.withdraw()
+                        break
+                break
+            case 0:
+                # Quit
+                break
