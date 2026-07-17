@@ -155,10 +155,15 @@ def main():
                         staff.createStaff(info[0],int(info[1]),info[2],info[3],info[4])
                         break
                     case 3:
-                        staff.updateStaff()
+                        print("enter staff info")
+                        info = input()
+                        info = info.split(",")
+                        staff.updateStaff(info[0],info[1],info[2],info[3])
                         break
                     case 4:
-                        staff.deleteStaff()
+                        print("enter name")
+                        info = input()
+                        staff.deleteStaff(info)
                         break
                 break
             case 2:
@@ -166,16 +171,26 @@ def main():
                 cmd2 = input()
                 match cmd2:
                     case 1:
-                        role.fetchRole()
+                        print("enter name")
+                        info = input()
+                        role.fetchRole(info)
                         break
                     case 2:
-                        role.createRole()
+                        print("enter role info")
+                        info = input()
+                        info = info.split(",")
+                        role.createRole(info[0],info[1],info[2])
                         break
                     case 3:
-                        role.updateRole()
+                        print("enter role info")
+                        info = input()
+                        info = info.split(",")
+                        role.updateRole(info[0],info[1],info[2])
                         break
                     case 4:
-                        role.deleteRole()
+                        print("enter name")
+                        info = input()
+                        role.deleteRole(info)
                         break
                 break
             case 3:
@@ -183,22 +198,38 @@ def main():
                 cmd2 = input()
                 match cmd2:
                     case 1:
-                        customer.findCustomer()
+                        print("enter name")
+                        info = input()
+                        customer.findCustomer(info)
                         break
                     case 2:
-                        customer.createCustomer()
+                        print("enter customer info")
+                        info = input()
+                        info = info.split(",")
+                        customer.createCustomer(info[0],info[1],info[2],info[3])
                         break
                     case 3:
-                        customer.updateCustomer()
+                        print("enter customer info")
+                        info = input()
+                        info = info.split(",")
+                        customer.updateCustomer(info[0],info[1],info[2])
                         break
                     case 4:
-                        customer.removeCustomers()
+                        print("enter name")
+                        info = input()
+                        customer.removeCustomers(info)
                         break
                     case 5:
-                        account.deposit()
+                        print("enter customer name and deposit amount")
+                        info = input()
+                        info = info.split(",")
+                        account.deposit(info[0],info[1])
                         break
                     case 6:
-                        account.withdraw()
+                        print("enter customer name and widthdrawl amount")
+                        info = input()
+                        info = info.split(",")
+                        account.withdraw(info[0],info[1])
                         break
                 break
             case 0:
